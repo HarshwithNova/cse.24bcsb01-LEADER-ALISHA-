@@ -2,15 +2,61 @@
 <html>
 <head>
 <title>Cosmic Watch - Asteroid Tracker</title>
+
 <link rel="stylesheet" href="cosmic watch.css">
 </head>
+<style>
+    /* 🌍 EARTH CIRCLE */
+.earth-container {
+  width: 260px;
+  height: 260px;
+  margin: 40px auto;
+  border-radius: 50%;
+  position: relative;
+  box-shadow: 0 0 60px rgba(100,150,255,0.6);
+  overflow: hidden;
+}
+
+.earth {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 30% 30%, #6ec6ff, #1e3c72 60%, #020b2d);
+  animation: rotateEarth 20s linear infinite;
+}
+
+@keyframes rotateEarth {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Fake continents */
+.earth::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0,255,180,0.25) 0,
+      rgba(0,255,180,0.25) 12px,
+      transparent 12px,
+      transparent 24px
+    );
+  border-radius: 50%;
+  opacity: 0.4;
+
+</style>
 <body>
     <div class="space-bg">
-    <div class="stars"></div>
-    <div class="stars2"></div>
-    <div class="orbit"></div>
+        <div class="stars"></div>
+        <div class="stars2"></div>
+        <div class="orbit"></div>
     </div>
 <header>
+   
+      
     <div class="logo">🌌 COSMIC WATCH</div>
     <nav>
         <a href="dashboard.html">Dashboard</a>
@@ -19,12 +65,24 @@
         <a href="login.html" class="login">Login</a>
     </nav>
 </header>
-<section class="hero">
+<section class="intro reveal">
+    <h1 img src="6400112.jpg"> The Infinite Universe</h1>
+    <p>
+      Space is vast, mysterious, and constantly in motion. Millions of celestial
+      bodies travel through the cosmos every second — including Near-Earth Objects
+      that pass silently by our planet.
+    </p>
+    <p>
+      Understanding space is not just curiosity — it is survival, science,
+      and humanity’s next frontier.
+    </p>
+  </section>
+<section class="hero reveal">
     <h1>Interstellar Asteroid Tracker</h1>
     <p>Real-Time Monitoring of Near-Earth Objects</p>
     <a href="live data.html"><button>Explore Live Data</button></a>
 </section>
-<section class="stats">
+<section class="stats reveal">
     <div class="card">
         <h2>245</h2>
         <p>Asteroids Today</p>
@@ -38,7 +96,45 @@
         <p>Closest Approach</p>
     </div>
 </section>
-<section class="asteroids">
+<section class="scientists reveal">
+    <h2>🧠 Minds Who Unlocked the Cosmos</h2>
+  
+    <div class="scientist-grid">
+      <div class="scientist-card">
+        <h3>Carl Sagan</h3>
+        <p>
+          “Somewhere, something incredible is waiting to be known.”
+        </p>
+        <span>Cosmologist & Science Communicator</span>
+      </div>
+  
+      <div class="scientist-card">
+        <h3>Stephen Hawking</h3>
+        <p>
+          Explored black holes, time, and the origins of the universe.
+        </p>
+        <span>Theoretical Physicist</span>
+      </div>
+  
+      <div class="scientist-card">
+        <h3>Isaac Newton</h3>
+        <p>
+          Laid the foundation of classical mechanics and gravity.
+        </p>
+        <span>Father of Modern Physics</span>
+      </div>
+  
+      <div class="scientist-card">
+        <h3>Galileo Galilei</h3>
+        <p>
+          First to observe planets, moons, and stars through a telescope.
+        </p>
+        <span>Father of Observational Astronomy</span>
+      </div>
+    </div>
+  </section>
+  
+<section class="asteroids reveal">
 <h2>☄️ Live Asteroid Feed</h2>
 <div class="asteroid-card">
     <h3>Asteroid AX-221</h3>
@@ -62,5 +158,39 @@
 <footer>
     <p>© 2026 Cosmic Watch-Asteroid Tracker</p>
 </footer>
+<script>
+    function revealOnScroll() {
+      const reveals = document.querySelectorAll(".reveal");
+    
+      reveals.forEach(el => {
+        const windowHeight = window.innerHeight;
+        const elementTop = el.getBoundingClientRect().top;
+        const revealPoint = 100;
+    
+        if (elementTop < windowHeight - revealPoint) {
+          el.classList.add("active");
+        }
+      });
+    }
+    
+    window.addEventListener("scroll", revealOnScroll);
+    revealOnScroll();
+    const topBtn = document.getElementById("topBtn");
+
+window.addEventListener("scroll", () => {
+  if (window.scrollY > 300) {
+    topBtn.style.display = "block";
+  } else {
+    topBtn.style.display = "none";
+  }
+});
+
+topBtn.onclick = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+};
+
+    </script>
+    
+<button id="topBtn">↑</button>
 </body>
 </html>
