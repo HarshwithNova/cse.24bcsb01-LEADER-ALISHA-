@@ -2,28 +2,33 @@ import express from "express";
 import dotenv from "dotenv";
 import compression from "compression";
 import fetch from "node-fetch";
+import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
 
 dotenv.config();
 
-const app = express();
-const PORT = process.env.PORT || 3000;
-
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// 🔥 SPEED MIDDLEWARE
+const app = express();
+const PORT = process.env.PORT || 5500;
+
+// Middleware
+app.use(cors());
 app.use(compression());
 app.use(express.json());
-app.use(express.static("public"));
 
-// 🚀 CACHE (acts like Redis for now)
+// Serve frontend
+const FRONTEND_PATH = path.join(__dirname, "public");
+app.use(express.static(FRONTEND_PATH));
+
+// 🚀 Cache setup
 let asteroidCache = null;
 let cacheTime = 0;
-const CACHE_DURATION = 15 * 60 * 1000; // 15 min
+const CACHE_DURATION = 15 * 60 * 1000; // 15 minutes
 
-// 🛰️ FETCH ASTEROIDS (NASA)
+// Fetch asteroids from NASA
 async function fetchAsteroids() {
   const today = new Date();
   const end = new Date();
@@ -37,59 +42,56 @@ async function fetchAsteroids() {
   const data = await res.json();
 
   const asteroids = [];
-
   for (const date in data.near_earth_objects) {
     data.near_earth_objects[date].forEach(a => {
       asteroids.push({
         id: a.id,
         name: a.name,
         hazardous: a.is_potentially_hazardous_asteroid,
-        diameter:
-          a.estimated_diameter.kilometers.estimated_diameter_max.toFixed(2),
-        velocity:
-          a.close_approach_data[0].relative_velocity.kilometers_per_hour,
-        missDistance:
-          a.close_approach_data[0].miss_distance.kilometers,
-        approachDate: date
+        diameter: a.estimated_diameter.kilometers.estimated_diameter_max.toFixed(2),
+        velocity: a.close_approach_data[0].relative_velocity.kilometers_per_hour,
+        missDistance: a.close_approach_data[0].miss_distance.kilometers,
+        approachDate: date,
+        orbitingBody: a.close_approach_data[0].orbiting_body,
+        closeApproachData: a.close_approach_data
       });
     });
   }
   return asteroids;
 }
 
-// 📌 LIST API
+// API routes
 app.get("/api/asteroids", async (req, res) => {
   try {
     if (asteroidCache && Date.now() - cacheTime < CACHE_DURATION) {
       return res.json(asteroidCache);
     }
-
     const data = await fetchAsteroids();
     asteroidCache = data;
     cacheTime = Date.now();
-
     res.json(data);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 });
 
-// 📌 DETAIL API
-app.get("/api/asteroids/:id", (req, res) => {
-  const asteroid = asteroidCache?.find(a => a.id === req.params.id);
-  if (!asteroid) return res.status(404).json({ error: "Not found" });
-  res.json(asteroid);
+app.get("/api/asteroids/:id", async (req, res) => {
+  try {
+    if (!asteroidCache) {
+      asteroidCache = await fetchAsteroids();
+      cacheTime = Date.now();
+    }
+    const asteroid = asteroidCache.find(a => a.id === req.params.id);
+    if (!asteroid) return res.status(404).json({ error: "Asteroid not found" });
+    res.json(asteroid);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
-// 🌐 FRONTEND ROUTES
+// Serve frontend pages
 app.get("/", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/index.html"));
+  res.sendFile(path.join(FRONTEND_PATH, "index.html"));
 });
 
-app.get("/detail", (req, res) => {
-  res.sendFile(path.join(__dirname, "public/detail.html"));
-});
-
-app.listen(PORT, () =>
-  console.log(`🚀 Server running at http://localhost:${PORT}`)
-);
+app.listen(PORT, () => console.log(`🚀 Server running at http://localhost:${PORT}`));
