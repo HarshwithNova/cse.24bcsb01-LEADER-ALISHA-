@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import fetch from "node-fetch";
 import cors from "cors";
 
+app.use(cors());
 dotenv.config();
 
 const app = express();
@@ -173,5 +174,3 @@ app.get("/api/asteroids/:id", async (req, res) => {
 app.listen(PORT, () => {
   console.log(`🚀 Server running on http://localhost:${PORT}`);
 });
-app.use(cors());
-
