@@ -3,6 +3,31 @@
 <head>
 <title>Cosmic Watch - Dashboard</title>
 <link rel="stylesheet" href="cosmic watch.css">
+<style>
+    /* 🌌 STAR CURSOR EFFECT */
+.star{
+  position: fixed;
+  width:20px;
+  height:20px;
+  background:white;
+  border-radius:50%;
+  pointer-events:none;
+  box-shadow:0 0 10px #7ecbff, 0 0 20px #7ecbff;
+  animation:starFade 0.8s linear forwards;
+  z-index:9999;
+}
+
+@keyframes starFade{
+  from{
+    opacity:5;
+    transform:scale(1);
+  }
+  to{
+    opacity:0;
+    transform:scale(0);
+  }
+}
+</style>
 </head>
 <body>
 <div class="space-bg">
@@ -13,6 +38,7 @@
 <div class="sidebar">
     <h2>🌌 Cosmic Watch</h2>
     <a href="dashboard.html">Dashboard</a>
+    <a href="live data.html">Live Feed</a>
     <a href="risk.html">Risk Analyzer</a>
     <a href="alerts.html">Alerts</a>
     <a href="login.html">Login</a>
@@ -60,5 +86,23 @@
         <p>🟢 No immediate collision threat detected.</p>
     </div>
 </div>
+<script>
+    // ⭐ Cursor Star Trail Effect
+document.addEventListener("mousemove",(e)=>{
+
+  const star = document.createElement("div");
+  star.className = "star";
+
+  star.style.left = e.clientX + "px";
+  star.style.top = e.clientY + "px";
+
+  document.body.appendChild(star);
+
+  setTimeout(()=>{
+    star.remove();
+  },800);
+
+});
+</script>
 </body>
 </html>
