@@ -1,0 +1,39 @@
+html, body {
+  margin:0; padding:0; width:100%; height:100%; font-family:'Orbitron',sans-serif; background:black; overflow:hidden;
+}
+
+* {
+  cursor:url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTNVYGbEM9cfEzJOeDe3frD__vWMtlwadw6IjVYgjYhocyZZKxA&s") 16 16,auto;
+}
+
+.hero {
+  position:fixed; inset:0; 
+  background: radial-gradient(circle at 30% 40%,rgba(140,90,255,.25),transparent 60%),
+              radial-gradient(circle at 70% 60%,rgba(0,200,255,.18),transparent 65%),
+              url("https://images.unsplash.com/photo-1444703686981-a3abbc4d4fe3?q=80&w=2400") center/cover no-repeat;
+  display:flex; align-items:center; justify-content:center; z-index:5; transition:transform 2s ease,opacity 2s ease;
+}
+.hero.hide { transform:scale(2); opacity:0; pointer-events:none; }
+
+.overlay{position:absolute; inset:0; background:rgba(5,0,15,.6);}
+.stars{position:absolute; inset:0; background:radial-gradient(1px 1px at 20% 30%,white,transparent),radial-gradient(1px 1px at 70% 80%,white,transparent),radial-gradient(1px 1px at 40% 60%,white,transparent),radial-gradient(1px 1px at 90% 20%,white,transparent); animation:twinkle 6s infinite alternate; opacity:.5;}
+@keyframes twinkle{from{opacity:.3} to{opacity:.6}}
+
+.content{position:relative; text-align:center; z-index:2; color:white;}
+.title{font-size:5rem; letter-spacing:.4em; font-weight:800; text-shadow:0 0 40px rgba(120,80,255,.7);}
+.subtitle{margin-top:15px; font-size:1.6rem; letter-spacing:.25em; color:#c7b8ff;}
+.tagline{margin-top:25px; max-width:700px; font-size:1rem; line-height:1.7; opacity:.9;}
+.cta{margin-top:45px; padding:14px 48px; border-radius:40px; background:linear-gradient(135deg,#7f5cff,#3cf0ff); color:black; font-weight:700; letter-spacing:.18em; border:none; cursor:pointer; transition:.3s ease;}
+.cta:hover{transform:scale(1.08); box-shadow:0 0 40px rgba(100,200,255,.8);}
+
+#infoPanel{position:fixed; right:20px; top:80px; width:350px; max-height:80vh; overflow-y:auto; background:rgba(20,10,40,.85); padding:15px; border-radius:14px; z-index:3; opacity:0; pointer-events:none; transition:.8s ease;}
+#infoPanel.show{opacity:1; pointer-events:auto;}
+#infoPanel button, #infoPanel select{width:100%; padding:10px; margin-bottom:10px; border:none; border-radius:8px; background:linear-gradient(135deg,#38bdf8,#7f5cff); font-family:'Orbitron'; font-weight:600; cursor:pointer;}
+#infoPanel select{background:#111; color:#fff;}
+
+.card{background:rgba(60,20,90,.75); padding:10px; margin-bottom:10px; border-radius:10px; font-size:13px;}
+.danger{color:#ff6b6b;font-weight:700;}
+.safe{color:#7dffb3;font-weight:700;}
+
+#spaceScene{position:fixed; inset:0; z-index:1;}
+audio{display:none;}
