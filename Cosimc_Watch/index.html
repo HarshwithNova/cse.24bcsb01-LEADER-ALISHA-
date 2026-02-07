@@ -1,31 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>NASA Asteroid Tracker</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="script.js"></script>
-
-</head>
+<html>
 <body>
+  <h1>Frontend Test</h1>
+  <button onclick="test()">Test API</button>
+  <pre id="out"></pre>
 
-  <h1>🌍 Near-Earth Asteroids</h1>
-
-  <div class="controls">
-    <button onclick="loadAsteroids()">Load Asteroids</button>
-    <button onclick="loadHazardous()">Hazardous Only</button>
-  </div>
-
-  <div id="asteroids" class="grid"></div>
-
-  <!-- Modal -->
-  <div id="modal" class="modal">
-    <div class="modal-content">
-      <span onclick="closeModal()" class="close">&times;</span>
-      <pre id="details"></pre>
-    </div>
-  </div>
-
-  <script src="script.js"></script>
+  <script>
+    function test() {
+      fetch("http://localhost:5000/api/status")
+        .then(res => res.json())
+        .then(data => {
+          document.getElementById("out").textContent =
+            JSON.stringify(data, null, 2);
+        })
+        .catch(err => console.error(err));
+    }
+  </script>
 </body>
 </html>
