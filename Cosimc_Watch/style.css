@@ -1,0 +1,69 @@
+body {
+  font-family: Arial, sans-serif;
+  background: #0b0d17;
+  color: white;
+  text-align: center;
+}
+
+.controls {
+  margin: 20px;
+}
+
+button {
+  padding: 10px 15px;
+  margin: 5px;
+  cursor: pointer;
+  border: none;
+  background: #1f51ff;
+  color: white;
+  border-radius: 5px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 15px;
+  padding: 20px;
+}
+
+.card {
+  background: #161b33;
+  padding: 15px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: scale(1.05);
+}
+
+.hazard {
+  color: #ff4c4c;
+}
+
+.safe {
+  color: #4cff4c;
+}
+
+/* Modal */
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+}
+
+.modal-content {
+  background: #111;
+  margin: 10% auto;
+  padding: 20px;
+  width: 80%;
+  max-width: 600px;
+}
+
+.close {
+  float: right;
+  cursor: pointer;
+  font-size: 22px;
+}
