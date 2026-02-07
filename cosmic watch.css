@@ -6,6 +6,7 @@ color:white;
 overflow-x:hidden;
 position:relative;
 cursor:pointer;
+perspective:1200px;
 }
 .space-bg{
 position:fixed;
@@ -476,4 +477,7 @@ margin-bottom:5px;
   margin-top:10px;
   color:#aaa;
   font-size:12px;
+}
+.intro-reveal{
+  margin-left:40px;
 }

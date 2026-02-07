@@ -85,6 +85,26 @@
     transform:scale(0);
   }
 }
+/* 🌌 3D Scroll Reveal Effect */
+.reveal{
+  opacity:0;
+  transform: perspective(900px) rotateX(60deg) scale(0.8) translateY(120px);
+  transition: all 1s cubic-bezier(.2,.8,.2,1);
+  transform-origin: center bottom;
+}
+
+.reveal.active{
+  opacity:1;
+  transform: perspective(900px) rotateX(0deg) scale(1) translateY(0);
+}
+.reveal.active{
+  opacity:1;
+  transform:
+    perspective(900px)
+    rotateX(0deg)
+    scale(1.05)
+    translateY(0);
+}
 
 </style>
 </head>
@@ -107,8 +127,8 @@
     </nav>
 </header>
 
-<section class="intro reveal">
-    <h1>The Infinite Universe</h1>
+<section class="intro-reveal">
+    <h1 class="introreveal">The Infinite Universe</h1>
     <p>
       Space is vast, mysterious, and constantly in motion. Millions of celestial
       bodies travel through the cosmos every second — including Near-Earth Objects
