@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Cosmic Watch - Dashboard</title>
+<link rel="stylesheet" href="cosmic watch.css">
+</head>
+<body>
+<div class="space-bg">
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="orbit"></div>
+</div>
+<div class="sidebar">
+    <h2>🌌 Cosmic Watch</h2>
+    <a href="#">Dashboard</a>
+    <a href="#">Live Feed</a>
+    <a href="#">Risk Analyzer</a>
+    <a href="#">Alerts</a>
+    <a href="login.html">Logout</a>
+</div>
+<div class="main">
+    <div class="panel">
+    <h2>🛰 3D Orbit Visualisation</h2>
+    <iframe src="orbit3d.html" class="orbit-frame"></iframe>
+    </div>
+    <h1>🚀 Asteroid Monitoring Dashboard</h1>
+    <div class="stats">
+        <div class="card">
+            <h2>245</h2>
+            <p>Asteroids Detected</p>
+        </div>
+        <div class="card">
+            <h2>12</h2>
+            <p>Hazardous Objects</p>
+        </div>
+        <div class="card">
+            <h2>3</h2>
+            <p>Close Approaches</p>
+        </div>
+    </div>
+    <div class="panel">
+        <h2>☄️ Live Feed</h2>
+        <div class="asteroid-card">
+            <h3>Asteroid AX-221</h3>
+            <p>Velocity: 23 km/s</p>
+            <p>Distance: 1.2M km</p>
+            <span class="safe">SAFE</span>
+        </div>
+        <div class="asteroid-card hazard">
+            <h3>Asteroid ZX-99</h3>
+            <p>Velocity: 42 km/s</p>
+            <p>Distance: 450k km</p>
+            <span class="danger">HAZARDOUS</span>
+        </div>
+    </div>
+    <div class="panel">
+        <h2>⚠️ Risk Analyzer</h2>
+        <p>Risk Score: <span class="danger">HIGH</span></p>
+        <p>Diameter Category: Large</p>
+        <p>Miss Distance: 320k km</p>
+    </div>
+    <div class="panel">
+        <h2>🔔 Alerts</h2>
+        <p>⚠️ Asteroid ZX-99 close approach in 2 days.</p>
+        <p>🟢 No immediate collision threat detected.</p>
+    </div>
+</div>
+</body>
+</html>
