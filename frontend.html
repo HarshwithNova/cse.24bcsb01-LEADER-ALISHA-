@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Cosmic Watch – Visual Asteroid Risk System</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  background: linear-gradient(160deg, #1a002b, #050008);
+  color: white;
+}
+
+header {
+  position: absolute;
+  top: 10px;
+  width: 100%;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  z-index: 10;
+  color: #38bdf8;
+}
+
+#infoPanel {
+  position: absolute;
+  right: 15px;
+  top: 70px;
+  width: 340px;
+  max-height: 82vh;
+  overflow-y: auto;
+  background: rgba(25, 10, 40, 0.9);
+  padding: 15px;
+  border-radius: 12px;
+  z-index: 10;
+}
+
+button {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #38bdf8);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
+
+.card {
+  background: rgba(60, 20, 90, 0.75);
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 10px;
+  font-size: 14px;
+}
+
+.danger { color: #ff6b6b; font-weight: bold; }
+.safe { color: #7dffb3; font-weight: bold; }
+
+.hint-text {
+  text-align: center;
+  font-size: 14px;
+  color: #d7b6ff;
+  margin-bottom: 10px;
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(56,189,248,0.7); }
+  70% { box-shadow: 0 0 0 14px rgba(56,189,248,0); }
+  100% { box-shadow: 0 0 0 0 rgba(56,189,248,0); }
+}
+
+.fetch-indicator {
+  animation: pulse 2s infinite;
+}
+</style>
+</head>
+
+<body>
+
+<header>🌌 Cosmic Watch — Visual Asteroid Risk System</header>
+
+<div id="infoPanel">
+  <div class="hint-text" id="hintText">
+    ⬇ Click to visualize near-Earth asteroid risks
+  </div>
+
+  <button class="fetch-indicator" onclick="loadAsteroids()">
+    ☄ Fetch Asteroids
+  </button>
+
+  
+
+  <div id="asteroidList"></div>
+</div>
+
+<script>
+
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 2000);
+camera.position.set(0, 0, 8);
+camera.lookAt(0, 0, 0);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setClearColor(0x000000, 0);
+document.body.appendChild(renderer.domElement);
+const starGeo = new THREE.BufferGeometry();
+const starPos = [];
+for (let i = 0; i < 6000; i++) {
+  starPos.push((Math.random()-0.5)*2000,(Math.random()-0.5)*2000,(Math.random()-0.5)*2000);
+}
+starGeo.setAttribute("position", new THREE.Float32BufferAttribute(starPos,3));
+scene.add(new THREE.Points(starGeo,new THREE.PointsMaterial({color:0xcccccc,size:0.6})));
+
+/* ================= LIGHT ================= */
+scene.add(new THREE.PointLight(0xffffff,1.8));
+scene.add(new THREE.AmbientLight(0x707070,0.7));
+
+const earthOrbit = new THREE.Object3D();
+scene.add(earthOrbit);
+
+const earth = new THREE.Mesh(
+  new THREE.SphereGeometry(0.7,64,64),
+  new THREE.MeshStandardMaterial({
+    map: new THREE.TextureLoader().load("https://threejs.org/examples/textures/land_ocean_ice_cloud_2048.jpg")
+  })
+);
+earth.position.x = 3;
+earthOrbit.add(earth);
+
+const moonOrbit = new THREE.Object3D();
+earth.add(moonOrbit);
+
+const moon = new THREE.Mesh(
+  new THREE.SphereGeometry(0.18,32,32),
+  new THREE.MeshStandardMaterial({color:0xdddddd})
+);
+moon.position.x = 1;
+moonOrbit.add(moon);
+
+
+const asteroidBelt = [];
+
+for (let i = 0; i < 30; i++) {
+  const size = Math.random()*0.12 + 0.05;
+  const geometry = new THREE.IcosahedronGeometry(size,1);
+
+  const g = Math.floor(170 + Math.random()*40);
+  const material = new THREE.MeshStandardMaterial({
+    color: new THREE.Color(g/255,g/255,g/255),
+    roughness: 0.9,
+    metalness: 0.15
+  });
+
+  const asteroid = new THREE.Mesh(geometry, material);
+
+  asteroid.userData = {
+    angle: Math.random()*Math.PI*2,
+    speed: Math.random()*0.002 + 0.001,
+    radius: Math.random()*3 + 4,
+    hazardous: Math.random() < 0.2
+  };
+
+  if (asteroid.userData.hazardous) {
+    asteroid.scale.set(1.5,1.5,1.5);
+    asteroid.material.emissive = new THREE.Color(0x330000);
+  }
+
+  scene.add(asteroid);
+  asteroidBelt.push(asteroid);
+}
+
+
+function animate(){
+  requestAnimationFrame(animate);
+
+  earthOrbit.rotation.y += 0.001;
+  earth.rotation.y += 0.002;
+  moonOrbit.rotation.y += 0.01;
+
+  asteroidBelt.forEach(a=>{
+    a.userData.angle += a.userData.speed;
+    a.position.x = Math.cos(a.userData.angle)*a.userData.radius;
+    a.position.z = Math.sin(a.userData.angle)*a.userData.radius;
+    a.rotation.x += 0.003;
+    a.rotation.y += 0.003;
+  });
+
+  renderer.render(scene,camera);
+}
+animate();
+
+
+window.addEventListener("resize",()=>{
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+});
+
+
+function loadAsteroids(){
+  const hint=document.getElementById("hintText");
+  const btn=document.querySelector(".fetch-indicator");
+  hint.textContent="⏳ Loading asteroid data...";
+  btn.classList.remove("fetch-indicator");
+
+  const today=new Date().toISOString().split("T")[0];
+  fetch(`https://api.nasa.gov/neo/rest/v1/feed?start_date=${today}&end_date=${today}&api_key=DEMO_KEY`)
+  .then(r=>r.json())
+  .then(data=>{
+    const list=document.getElementById("asteroidList");
+    list.innerHTML="";
+    data.near_earth_objects[today].forEach(a=>{
+      const c=a.close_approach_data[0];
+      list.innerHTML+=`
+        <div class="card">
+          <strong>${a.name}</strong><br>
+          Diameter: ${a.estimated_diameter.meters.estimated_diameter_max.toFixed(1)} m<br>
+          Distance: ${Number(c.miss_distance.kilometers).toLocaleString()} km<br>
+          Velocity: ${Number(c.relative_velocity.kilometers_per_hour).toFixed(0)} km/h<br>
+          <span class="${a.is_potentially_hazardous_asteroid?'danger':'safe'}">
+            ${a.is_potentially_hazardous_asteroid?'⚠ Hazardous':'✅ Safe'}
+          </span>
+        </div>`;
+    });
+    hint.textContent="✅ Asteroid data loaded";
+  })
+  .catch(()=>hint.textContent="⚠ Failed to load data");
+}
+</script>
+
+</body>
+</html>
