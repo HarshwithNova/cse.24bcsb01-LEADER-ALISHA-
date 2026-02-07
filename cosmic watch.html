@@ -4,9 +4,10 @@
 <title>Cosmic Watch - Asteroid Tracker</title>
 
 <link rel="stylesheet" href="cosmic watch.css">
-</head>
+
 <style>
-    /* 🌍 EARTH CIRCLE */
+
+/* 🌍 EARTH CIRCLE */
 .earth-container {
   width: 260px;
   height: 260px;
@@ -46,17 +47,34 @@
     );
   border-radius: 50%;
   opacity: 0.4;
+}
+
+/* 🔼 Scroll To Top Button */
+#topBtn{
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #0a1a3a;
+  color: white;
+  border: none;
+  padding: 12px 16px;
+  border-radius: 50%;
+  cursor: pointer;
+  display: none;
+}
 
 </style>
+</head>
+
 <body>
-    <div class="space-bg">
-        <div class="stars"></div>
-        <div class="stars2"></div>
-        <div class="orbit"></div>
-    </div>
+
+<div class="space-bg">
+    <div class="stars"></div>
+    <div class="stars2"></div>
+    <div class="orbit"></div>
+</div>
+
 <header>
-   
-      
     <div class="logo">🌌 COSMIC WATCH</div>
     <nav>
         <a href="dashboard.html">Dashboard</a>
@@ -65,8 +83,9 @@
         <a href="login.html" class="login">Login</a>
     </nav>
 </header>
+
 <section class="intro reveal">
-    <h1 img src="6400112.jpg"> The Infinite Universe</h1>
+    <h1>The Infinite Universe</h1>
     <p>
       Space is vast, mysterious, and constantly in motion. Millions of celestial
       bodies travel through the cosmos every second — including Near-Earth Objects
@@ -76,12 +95,14 @@
       Understanding space is not just curiosity — it is survival, science,
       and humanity’s next frontier.
     </p>
-  </section>
+</section>
+
 <section class="hero reveal">
     <h1>Interstellar Asteroid Tracker</h1>
     <p>Real-Time Monitoring of Near-Earth Objects</p>
     <a href="live data.html"><button>Explore Live Data</button></a>
 </section>
+
 <section class="stats reveal">
     <div class="card">
         <h2>245</h2>
@@ -96,86 +117,98 @@
         <p>Closest Approach</p>
     </div>
 </section>
+
 <section class="scientists reveal">
-    <h2>🧠 Minds Who Unlocked the Cosmos</h2>
-  
-    <div class="scientist-grid">
-      <div class="scientist-card">
+  <h2>🧠 Minds Who Unlocked the Cosmos</h2>
+
+  <div class="scientist-scroll">
+
+    <div class="scientist-card">
+      <div class="card-inner">
         <h3>Carl Sagan</h3>
-        <p>
-          “Somewhere, something incredible is waiting to be known.”
-        </p>
+        <p>“Somewhere, something incredible is waiting to be known.”</p>
         <span>Cosmologist & Science Communicator</span>
       </div>
-  
-      <div class="scientist-card">
+    </div>
+
+    <div class="scientist-card">
+      <div class="card-inner">
         <h3>Stephen Hawking</h3>
-        <p>
-          Explored black holes, time, and the origins of the universe.
-        </p>
+        <p>Explored black holes, time, and the origins of the universe.</p>
         <span>Theoretical Physicist</span>
       </div>
-  
-      <div class="scientist-card">
+    </div>
+
+    <div class="scientist-card">
+      <div class="card-inner">
         <h3>Isaac Newton</h3>
-        <p>
-          Laid the foundation of classical mechanics and gravity.
-        </p>
+        <p>Laid the foundation of classical mechanics and gravity.</p>
         <span>Father of Modern Physics</span>
       </div>
-  
-      <div class="scientist-card">
+    </div>
+
+    <div class="scientist-card">
+      <div class="card-inner">
         <h3>Galileo Galilei</h3>
-        <p>
-          First to observe planets, moons, and stars through a telescope.
-        </p>
+        <p>First to observe planets, moons, and stars through a telescope.</p>
         <span>Father of Observational Astronomy</span>
       </div>
     </div>
-  </section>
-  
+
+  </div>
+</section>
+
 <section class="asteroids reveal">
 <h2>☄️ Live Asteroid Feed</h2>
+
 <div class="asteroid-card">
     <h3>Asteroid AX-221</h3>
     <p>Velocity: 24 km/s</p>
     <p>Distance: 1.2M km</p>
     <span class="safe">SAFE</span>
 </div>
+
 <div class="asteroid-card hazard">
     <h3>Asteroid ZX-99</h3>
     <p>Velocity: 42 km/s</p>
     <p>Distance: 450k km</p>
     <span class="danger">HAZARDOUS</span>
 </div>
+
 <div class="asteroid-card">
     <h3>Asteroid LQ-77</h3>
     <p>Velocity: 18 km/s</p>
     <p>Distance: 2.3M km</p>
     <span class="safe">SAFE</span>
 </div>
+
 </section>
+
 <footer>
     <p>© 2026 Cosmic Watch-Asteroid Tracker</p>
 </footer>
+
+<button id="topBtn">↑</button>
+
 <script>
-    function revealOnScroll() {
-      const reveals = document.querySelectorAll(".reveal");
-    
-      reveals.forEach(el => {
-        const windowHeight = window.innerHeight;
-        const elementTop = el.getBoundingClientRect().top;
-        const revealPoint = 100;
-    
-        if (elementTop < windowHeight - revealPoint) {
-          el.classList.add("active");
-        }
-      });
+function revealOnScroll() {
+  const reveals = document.querySelectorAll(".reveal");
+
+  reveals.forEach(el => {
+    const windowHeight = window.innerHeight;
+    const elementTop = el.getBoundingClientRect().top;
+    const revealPoint = 100;
+
+    if (elementTop < windowHeight - revealPoint) {
+      el.classList.add("active");
     }
-    
-    window.addEventListener("scroll", revealOnScroll);
-    revealOnScroll();
-    const topBtn = document.getElementById("topBtn");
+  });
+}
+
+window.addEventListener("scroll", revealOnScroll);
+revealOnScroll();
+
+const topBtn = document.getElementById("topBtn");
 
 window.addEventListener("scroll", () => {
   if (window.scrollY > 300) {
@@ -188,9 +221,26 @@ window.addEventListener("scroll", () => {
 topBtn.onclick = () => {
   window.scrollTo({ top: 0, behavior: "smooth" });
 };
+// 🧠 3D Tilt Effect
+document.querySelectorAll(".scientist-card").forEach(card=>{
+  card.addEventListener("mousemove",(e)=>{
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    </script>
-    
-<button id="topBtn">↑</button>
+    const rotateY = (x / rect.width - 0.5) * 20;
+    const rotateX = -(y / rect.height - 0.5) * 20;
+
+    card.style.transform =
+      `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateY(-10px)`;
+  });
+
+  card.addEventListener("mouseleave",()=>{
+    card.style.transform = "rotateY(0) rotateX(0)";
+  });
+});
+
+</script>
+
 </body>
 </html>

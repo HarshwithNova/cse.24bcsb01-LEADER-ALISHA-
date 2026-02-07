@@ -430,3 +430,49 @@ margin-bottom:5px;
 .a{
     margin-left:290px;
 }
+/* 🌌 3D SCIENTIST SCROLL */
+.scientist-scroll{
+  display:flex;
+  gap:40px;
+  overflow-x:auto;
+  padding:40px;
+  perspective:1000px;
+  scroll-behavior:smooth;
+}
+
+.scientist-scroll::-webkit-scrollbar{
+  display:none;
+}
+
+.scientist-card{
+  min-width:260px;
+  height:220px;
+  background:rgba(10,20,50,0.6);
+  border-radius:20px;
+  backdrop-filter:blur(10px);
+  transform-style:preserve-3d;
+  transition:transform 0.4s ease, box-shadow 0.4s;
+  box-shadow:0 10px 30px rgba(0,0,0,0.5);
+}
+
+.scientist-card:hover{
+  transform:rotateY(15deg) rotateX(5deg) translateY(-10px);
+  box-shadow:0 20px 50px rgba(0,150,255,0.4);
+}
+
+.card-inner{
+  padding:20px;
+  transform:translateZ(40px);
+}
+
+.scientist-card h3{
+  color:#7ecbff;
+  margin-bottom:10px;
+}
+
+.scientist-card span{
+  display:block;
+  margin-top:10px;
+  color:#aaa;
+  font-size:12px;
+}
