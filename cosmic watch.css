@@ -5,6 +5,7 @@ background:#020617;
 color:white;
 overflow-x:hidden;
 position:relative;
+cursor:none;
 }
 .space-bg{
 position:fixed;
