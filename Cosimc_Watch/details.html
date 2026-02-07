@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Asteroid Details</title>
+  <style>
+    body {
+      font-family: Arial;
+      background: #0b0f1a;
+      color: white;
+      padding: 20px;
+    }
+
+    .box {
+      background: #151a2d;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      margin: auto;
+    }
+
+    a {
+      color: #1e90ff;
+    }
+  </style>
+</head>
+<body>
+
+<div class="box" id="details">Loading...</div>
+
+<script>
+const id = new URLSearchParams(location.search).get("id");
+
+fetch(`http://localhost:3000/api/asteroids/${id}`)
+  .then(res => res.json())
+  .then(a => {
+    details.innerHTML = `
+      <h2>${a.name}</h2>
+      <p><b>Hazardous:</b> ${a.hazardous}</p>
+      <p><b>Min Diameter:</b> ${a.diameter.estimated_diameter_min} km</p>
+      <p><b>Max Diameter:</b> ${a.diameter.estimated_diameter_max} km</p>
+      <p>
+        <a href="${a.nasa_jpl_url}" target="_blank">
+          NASA Official Page
+        // </a>
+      </p>
+      <button onclick="history.back()">⬅ Back</button>
+    `;
+  });
+</script>
+
+</body>
+</html>
