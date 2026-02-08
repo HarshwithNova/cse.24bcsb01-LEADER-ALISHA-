@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Watch</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
+</head>
+<body>
+    <div class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="title">COSMIC</h1>
+            <h2 class="subtitle">WATCH</h2>
+            <p class="tagline">Real-time near-Earth asteroid visualization and risk awareness</p>
+            <button class="cta" onclick="enterSpace()">ENTER SPACE</button>
+        </div>
+    </div>
+
+    <div id="infoPanel">
+        <div class="panel-header">
+            <h3><i class="fas fa-satellite"></i> ASTEROID CONTROL PANEL</h3>
+        </div>
+        <button id="fetchBtn" class="panel-btn">
+            <i class="fas fa-sync-alt"></i> FETCH LIVE DATA
+        </button>
+        <button id="demoBtn" class="panel-btn secondary">
+            <i class="fas fa-vial"></i> LOAD DEMO DATA
+        </button>
+        <select id="selectAsteroid">
+            <option value="">Select an Asteroid</option>
+        </select>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Total Asteroids:</span>
+                <span class="stat-value" id="totalCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Hazardous:</span>
+                <span class="stat-value danger" id="hazardCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Safe:</span>
+                <span class="stat-value safe" id="safeCount">0</span>
+            </div>
+        </div>
+        
+        <div id="asteroidList">
+            <div class="empty-state">
+                <i class="fas fa-meteor"></i>
+                <p>No asteroid data loaded</p>
+                <p class="hint">Click buttons above to load data</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="resetCam" class="control-btn">
+                <i class="fas fa-crosshairs"></i> RESET VIEW
+            </button>
+            <button id="audioBtn" class="control-btn">
+                <i class="fas fa-volume-up"></i> AUDIO ON/OFF
+            </button>
+        </div>
+    </div>
+
+    <canvas id="spaceScene"></canvas>
+    
+    <audio id="spaceAudio" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-space-game-668.mp3" type="audio/mpeg">
+    </audio>
+
+    <script src="script.js"></script>
+</body>
+</html>
