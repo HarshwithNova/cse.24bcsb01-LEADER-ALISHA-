@@ -4,310 +4,463 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Cosmic Watch - Login</title>
-
+<link rel="stylesheet" href="style.css">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
-
 <style>
-
 /* ======================= */
-/* RESET */
-*{margin:0;padding:0;box-sizing:border-box;}
-html,body{
-width:100%;
-height:100%;
-font-family:'Orbitron',sans-serif;
-background:#000;
-color:#fff;
-overflow:hidden;
-}
+/* BASE RESET & BODY */
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:100%; height:100%; font-family:'Orbitron',sans-serif; background:#000; color:#fff; overflow:hidden; }
 
 /* ======================= */
 /* LOGIN PAGE */
-#loginPage{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-background:radial-gradient(circle at center,#000428 0%,#004e92 100%);
-display:flex;
-justify-content:center;
-align-items:center;
-z-index:2000;
+#loginPage {
+  position: fixed; top:0; left:0; width:100%; height:100%;
+  background: radial-gradient(circle at center, #000428 0%, #004e92 100%);
+  display:flex; justify-content:center; align-items:center; z-index:2000;
 }
 
-.login-container{
-background:rgba(0,0,40,0.9);
-padding:2rem 3rem;
-border-radius:15px;
-box-shadow:0 0 40px rgba(60,240,255,0.3);
-width:320px;
-text-align:center;
+.login-container {
+  background: rgba(0,0,40,0.9); padding:2rem 3rem; border-radius:15px;
+  box-shadow:0 0 40px rgba(60,240,255,0.3); width:320px; text-align:center;
 }
 
-.login-container h2{color:#3cf0ff;margin-bottom:8px;}
+.login-container h2 { font-size:1.8rem; color:#3cf0ff; margin-bottom:0.5rem; }
+.login-container .subtitle { font-size:0.9rem; color:#b8c7ff; margin-bottom:1.5rem; }
 
-.login-container input{
-width:100%;
-padding:0.8rem;
-margin-bottom:1rem;
-border-radius:8px;
-border:1px solid rgba(60,240,255,0.3);
-background:rgba(20,30,60,0.7);
-color:white;
+.login-container input[type="email"],
+.login-container input[type="password"] {
+  width:100%; padding:0.8rem; margin-bottom:1rem; border-radius:8px;
+  border:1px solid rgba(60,240,255,0.3); background: rgba(20,30,60,0.7);
+  color:white; font-family:'Orbitron',sans-serif; font-size:0.9rem;
 }
 
-.login-btn{
-padding:0.8rem;
-width:100%;
-background:linear-gradient(135deg,#7f5cff,#3cf0ff);
-border:none;
-border-radius:50px;
-color:#000;
-font-weight:700;
-cursor:pointer;
+.login-container input:focus { outline:none; border-color:#3cf0ff; }
+
+.login-btn {
+  padding:0.8rem 1.5rem; width:100%; background: linear-gradient(135deg,#7f5cff,#3cf0ff);
+  border:none; border-radius:50px; color:#000; font-weight:700; cursor:pointer;
+  transition: all 0.3s ease; text-transform:uppercase;
 }
 
-/* ======================= */
-/* HERO */
-.hero{
-position:fixed;
-top:0;left:0;
-width:100%;height:100%;
-display:flex;
-align-items:center;
-justify-content:center;
-background:linear-gradient(135deg,#000428 0%,#004e92 100%);
-z-index:1000;
-transition:1s;
+.login-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(127,92,255,0.4),0 0 60px rgba(60,240,255,0.3);
 }
 
-.hero.hidden{
-opacity:0;
-pointer-events:none;
-}
-
-.title{
-font-size:5rem;
-letter-spacing:0.3em;
-text-align:center;
-}
-
-.subtitle{
-font-size:2rem;
-color:#3cf0ff;
-text-align:center;
-margin-bottom:20px;
-}
-
-.cta{
-padding:1rem 2rem;
-border-radius:50px;
-border:none;
-cursor:pointer;
-background:linear-gradient(135deg,#7f5cff,#3cf0ff);
-color:#000;
-font-weight:bold;
-}
-
-/* ======================= */
-/* DASHBOARD PANEL (FIXED) */
-
-#infoPanel{
-position:fixed;
-top:10px;
-left:10px;
-width:330px;
-background:rgba(0,0,0,0.7);
-border:1px solid rgba(60,240,255,0.4);
-backdrop-filter:blur(8px);
-padding:12px;
-z-index:500;
-display:none;  /* hidden by default */
-}
-
-#infoPanel.active{
-display:block;
-}
-
-.panel-header h3{
-font-size:18px;
-margin-bottom:10px;
-}
-
-.panel-btn{
-width:100%;
-margin-bottom:6px;
-padding:6px;
-background:#111;
-color:#fff;
-border:1px solid #3cf0ff;
-cursor:pointer;
-}
-
-.panel-btn.secondary{
-border-color:#7f5cff;
-}
-
-.stats{
-margin-top:8px;
-margin-bottom:10px;
-}
-
-.stat-item{
-display:flex;
-justify-content:space-between;
-font-size:14px;
-margin-bottom:3px;
-}
-
-.danger{color:#ff5c5c;}
-.safe{color:#3cff9c;}
-
-.controls{
-margin-top:10px;
-display:flex;
-gap:6px;
-}
-
-.control-btn{
-flex:1;
-padding:6px;
-background:#111;
-border:1px solid #3cf0ff;
-color:#fff;
-cursor:pointer;
-}
-
-/* ======================= */
-/* CANVAS FIX FOR DEPLOY */
-#spaceScene{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-z-index:0;
-}
+.login-options, .register-text { font-size:0.8rem; color:#b8c7ff; margin-top:0.5rem; }
+.login-options a, .register-text a { color:#3cf0ff; text-decoration:none; }
+.login-options a:hover, .register-text a:hover { text-decoration:underline; }
 
 /* STAR CURSOR */
-.star{
-position:fixed;
-width:12px;
-height:12px;
-background:white;
-border-radius:50%;
-pointer-events:none;
-box-shadow:0 0 10px #7ecbff;
-animation:fade .8s forwards;
+.star { position:fixed; width:12px; height:12px; background:white; border-radius:50%;
+  pointer-events:none; box-shadow:0 0 10px #7ecbff,0 0 20px #7ecbff; animation:starFade 0.8s linear forwards; z-index:9999;}
+@keyframes starFade { from{opacity:1; transform:scale(1);} to{opacity:0; transform:scale(0);} }
+
+/* ======================= */
+/* HERO + DASHBOARD STYLES (your existing CSS) */
+.hero {
+  position: fixed; top: 0; left: 0; width:100%; height:100%;
+  background: radial-gradient(circle at 20% 30%, rgba(127,92,255,0.3), transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(60,240,255,0.25), transparent 50%),
+              linear-gradient(135deg, #000428 0%, #004e92 100%);
+  display:flex; align-items:center; justify-content:center; z-index:1000; transition:opacity 1s ease, transform 1s ease;
 }
-@keyframes fade{
-from{opacity:1;transform:scale(1);}
-to{opacity:0;transform:scale(0);}
+.hero.hidden { opacity:0; transform:scale(1.1); pointer-events:none; }
+.hero-content { text-align:center; padding:2rem; max-width:800px; }
+.title { font-size:5rem; font-weight:800; letter-spacing:0.3em; color:#fff; text-shadow:0 0 20px rgba(127,92,255,0.7),0 0 40px rgba(60,240,255,0.5); margin-bottom:1rem; text-transform:uppercase;}
+.subtitle { font-size:2rem; font-weight:600; letter-spacing:0.2em; color:#3cf0ff; margin-bottom:2rem; text-transform:uppercase;}
+.tagline { font-size:1.1rem; color:#b8c7ff; margin-bottom:3rem; line-height:1.6; opacity:0.9; }
+.cta { padding:1.2rem 3rem; background:linear-gradient(135deg,#7f5cff,#3cf0ff); border:none; border-radius:50px; color:#000; font-family:'Orbitron',sans-serif; font-size:1.1rem; font-weight:700; letter-spacing:0.1em; cursor:pointer; transition:all 0.3s ease; text-transform:uppercase; }
+.cta:hover { transform:translateY(-3px); box-shadow:0 10px 30px rgba(127,92,255,0.4),0 0 60px rgba(60,240,255,0.3);}
+.cta:active { transform:translateY(-1px); }
+
+/* Info Panel, Stats, Asteroid List, Controls, Canvas scrollbars (keep your previous dashboard CSS here) */
+/* For brevity, I will not repeat everything; you can copy your existing CSS below this line */
+
+/* ... paste your entire CSS from the previous block here ... */
+/* ======================= */
+/* DASHBOARD VISIBILITY FIX */
+
+#infoPanel {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  width: 340px;
+  background: rgba(0,0,0,0.7);
+  border: 1px solid rgba(60,240,255,0.4);
+  backdrop-filter: blur(8px);
+  padding: 12px;
+  z-index: 1200;
+
+  /* 🔑 IMPORTANT */
+  display: none;
+}
+
+#infoPanel.active {
+  display: block;
+}
+
+/* Canvas must stay behind UI */
+#spaceScene {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
 }
 
 </style>
 </head>
-
 <body>
 
-<!-- LOGIN -->
+<!-- ======================== -->
+<!-- LOGIN PAGE -->
 <div id="loginPage">
-<div class="login-container">
-<h2>Welcome</h2>
-<input type="email" id="email" placeholder="Email">
-<input type="password" id="password" placeholder="Password">
-<button class="login-btn" onclick="login()">Login</button>
-</div>
+  <div class="login-container">
+    <h2>Welcome</h2>
+    <div class="subtitle">Enter your credentials</div>
+    <input type="email" id="email" placeholder="Email">
+    <input type="password" id="password" placeholder="Password">
+    <button class="login-btn" onclick="login()">Login</button>
+    <div class="login-options"><a href="#">Forgot Password?</a></div>
+    <div class="register-text">New user? <a href="#">Register</a></div>
+  </div>
 </div>
 
+<!-- ======================== -->
 <!-- HERO -->
 <div class="hero" id="hero">
-<div>
-<h1 class="title">COSMIC</h1>
-<h2 class="subtitle">WATCH</h2>
-<button class="cta" onclick="enterSpace()">ENTER SPACE</button>
-</div>
+  <div class="hero-content">
+    <h1 class="title">COSMIC</h1>
+    <h2 class="subtitle">WATCH</h2>
+    <p class="tagline">Real-time near-Earth asteroid visualization and risk awareness</p>
+    <button class="cta" onclick="enterSpace()">ENTER SPACE</button>
+  </div>
 </div>
 
+<!-- ======================== -->
 <!-- DASHBOARD -->
 <div id="infoPanel">
-<div class="panel-header">
-<h3><i class="fas fa-satellite"></i> ASTEROID CONTROL PANEL</h3>
-</div>
-
-<button id="fetchBtn" class="panel-btn">
-<i class="fas fa-sync-alt"></i> FETCH LIVE DATA
-</button>
-
-<button id="demoBtn" class="panel-btn secondary">
-<i class="fas fa-vial"></i> LOAD DEMO DATA
-</button>
-
-<select id="selectAsteroid">
-<option>Select an Asteroid</option>
-</select>
-
-<div class="stats">
-<div class="stat-item"><span>Total Asteroids:</span><span id="totalCount">0</span></div>
-<div class="stat-item"><span>Hazardous:</span><span id="hazardCount" class="danger">0</span></div>
-<div class="stat-item"><span>Safe:</span><span id="safeCount" class="safe">0</span></div>
-</div>
-
-<div class="controls">
-<button id="resetCam" class="control-btn">RESET VIEW</button>
-<button id="audioBtn" class="control-btn">AUDIO</button>
-</div>
+  <div class="panel-header"><h3><i class="fas fa-satellite"></i> ASTEROID CONTROL PANEL</h3></div>
+  <button id="fetchBtn" class="panel-btn"><i class="fas fa-sync-alt"></i> FETCH LIVE DATA</button>
+  <button id="demoBtn" class="panel-btn secondary"><i class="fas fa-vial"></i> LOAD DEMO DATA</button>
+  <select id="selectAsteroid"><option value="">Select an Asteroid</option></select>
+  <div class="stats">
+    <div class="stat-item"><span class="stat-label">Total Asteroids:</span><span class="stat-value" id="totalCount">0</span></div>
+    <div class="stat-item"><span class="stat-label">Hazardous:</span><span class="stat-value danger" id="hazardCount">0</span></div>
+    <div class="stat-item"><span class="stat-label">Safe:</span><span class="stat-value safe" id="safeCount">0</span></div>
+  </div>
+  <div id="asteroidList"><div class="empty-state"><i class="fas fa-meteor"></i><p>No asteroid data loaded</p><p class="hint">Click buttons above to load data</p></div></div>
+  <div class="controls">
+    <button id="resetCam" class="control-btn"><i class="fas fa-crosshairs"></i> RESET VIEW</button>
+    <button id="audioBtn" class="control-btn"><i class="fas fa-volume-up"></i> AUDIO ON/OFF</button>
+  </div>
 </div>
 
 <canvas id="spaceScene"></canvas>
+<audio id="spaceAudio" loop>
+  <source src="https://assets.mixkit.co/music/preview/mixkit-space-game-668.mp3" type="audio/mpeg">
+</audio>
 
 <script>
-
-/* LOGIN */
-function login(){
-const email=document.getElementById('email').value;
-const password=document.getElementById('password').value;
-
-if(email && password){
-document.getElementById('loginPage').style.display='none';
-createStarEffect();
-}else{
-alert('Enter email and password!');
+// =======================
+// LOGIN FUNCTION
+function login() {
+  const email = document.getElementById('email').value;
+  const password = document.getElementById('password').value;
+  if(email && password) {
+    document.getElementById('loginPage').style.display='none';
+    document.getElementById('hero').style.display='flex';
+    createStarEffect();
+  } else {
+    alert('Enter email and password!');
+  }
 }
+
+// STAR CURSOR EFFECT
+function createStarEffect() {
+  document.addEventListener('mousemove', e => {
+    const star = document.createElement('div');
+    star.className = 'star';
+    star.style.left = e.clientX + 'px';
+    star.style.top = e.clientY + 'px';
+    document.body.appendChild(star);
+    setTimeout(() => star.remove(), 800);
+  });
 }
 
-/* STAR CURSOR */
-function createStarEffect(){
-document.addEventListener('mousemove',e=>{
-const star=document.createElement('div');
-star.className='star';
-star.style.left=e.clientX+'px';
-star.style.top=e.clientY+'px';
-document.body.appendChild(star);
-setTimeout(()=>star.remove(),800);
+// =======================
+// Cosmic Watch JS
+/* ================================
+   GLOBAL VARIABLES
+================================ */
+
+let scene, camera, renderer, controls;
+let earth;
+let asteroids = [];
+let audioEnabled = false;
+
+/* ================================
+   INIT THREE JS
+================================ */
+
+function initThreeJS() {
+
+  const canvas = document.getElementById("spaceScene");
+
+  scene = new THREE.Scene();
+
+  camera = new THREE.PerspectiveCamera(
+    60,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+
+  camera.position.set(0, 5, 12);
+
+  renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    antialias: true
+  });
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.setPixelRatio(window.devicePixelRatio);
+
+  /* LIGHTS */
+  const light = new THREE.PointLight(0xffffff, 1.5);
+  light.position.set(10,10,10);
+  scene.add(light);
+
+  const ambient = new THREE.AmbientLight(0x404040);
+  scene.add(ambient);
+
+  /* EARTH */
+  const earthGeo = new THREE.SphereGeometry(2, 64, 64);
+  const earthMat = new THREE.MeshStandardMaterial({
+    color: 0x2266ff,
+    emissive: 0x112244,
+    metalness: 0.3,
+    roughness: 0.8
+  });
+
+  earth = new THREE.Mesh(earthGeo, earthMat);
+  scene.add(earth);
+
+  /* STARS BACKGROUND */
+  const starsGeo = new THREE.BufferGeometry();
+  const starVertices = [];
+
+  for(let i=0;i<2000;i++){
+    starVertices.push(
+      (Math.random()-0.5)*2000,
+      (Math.random()-0.5)*2000,
+      (Math.random()-0.5)*2000
+    );
+  }
+
+  starsGeo.setAttribute(
+    "position",
+    new THREE.Float32BufferAttribute(starVertices,3)
+  );
+
+  const starsMat = new THREE.PointsMaterial({size:2});
+  const starField = new THREE.Points(starsGeo,starsMat);
+  scene.add(starField);
+
+  /* CONTROLS */
+  controls = new THREE.OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  window.addEventListener("resize", onResize);
+
+  animate();
+}
+
+/* ================================
+   ANIMATION LOOP
+================================ */
+
+function animate() {
+  requestAnimationFrame(animate);
+
+  if(earth) {
+    earth.rotation.y += 0.002;
+  }
+
+  asteroids.forEach(a=>{
+    a.mesh.position.applyAxisAngle(new THREE.Vector3(0,1,0),0.002);
+  });
+
+  controls.update();
+  renderer.render(scene,camera);
+}
+
+/* ================================
+   RESIZE
+================================ */
+
+function onResize(){
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth,window.innerHeight);
+}
+
+/* ================================
+   ASTEROID CREATION
+================================ */
+
+function createAsteroid(data){
+
+  const geo = new THREE.SphereGeometry(0.2,16,16);
+  const mat = new THREE.MeshStandardMaterial({
+    color: data.hazardous ? 0xff4444 : 0x44ffcc
+  });
+
+  const mesh = new THREE.Mesh(geo,mat);
+
+  const distance = 5 + Math.random()*5;
+  const angle = Math.random()*Math.PI*2;
+
+  mesh.position.set(
+    Math.cos(angle)*distance,
+    (Math.random()-0.5)*2,
+    Math.sin(angle)*distance
+  );
+
+  scene.add(mesh);
+
+  asteroids.push({
+    mesh: mesh,
+    data: data
+  });
+}
+
+/* ================================
+   CLEAR ASTEROIDS
+================================ */
+
+function clearAsteroids(){
+  asteroids.forEach(a=>scene.remove(a.mesh));
+  asteroids=[];
+}
+
+/* ================================
+   UPDATE DASHBOARD
+================================ */
+
+function updateStats(list){
+
+  document.getElementById("totalCount").textContent = list.length;
+
+  const hazardous = list.filter(a=>a.hazardous).length;
+  const safe = list.length - hazardous;
+
+  document.getElementById("hazardCount").textContent = hazardous;
+  document.getElementById("safeCount").textContent = safe;
+
+  const select = document.getElementById("selectAsteroid");
+  select.innerHTML = '<option value="">Select an Asteroid</option>';
+
+  list.forEach((a,i)=>{
+    const opt = document.createElement("option");
+    opt.value = i;
+    opt.textContent = a.name;
+    select.appendChild(opt);
+  });
+}
+
+/* ================================
+   DEMO DATA
+================================ */
+
+function loadDemoData(){
+
+  clearAsteroids();
+
+  const demo = [
+    {name:"Astra-X1", hazardous:false},
+    {name:"Nyx-77", hazardous:true},
+    {name:"Helios-9", hazardous:false},
+    {name:"Orion-3", hazardous:true}
+  ];
+
+  demo.forEach(createAsteroid);
+  updateStats(demo);
+}
+
+/* ================================
+   FETCH LIVE NASA DATA
+================================ */
+
+async function fetchLiveData(){
+
+  try{
+
+    clearAsteroids();
+
+    const res = await fetch(
+      "https://api.nasa.gov/neo/rest/v1/feed?api_key=DEMO_KEY"
+    );
+
+    const json = await res.json();
+
+    const objs = Object.values(json.near_earth_objects)[0];
+
+    const list = objs.map(o=>({
+      name:o.name,
+      hazardous:o.is_potentially_hazardous_asteroid
+    }));
+
+    list.slice(0,20).forEach(createAsteroid);
+    updateStats(list);
+
+  }catch(err){
+    console.log(err);
+    alert("Failed to fetch live data");
+  }
+}
+
+/* ================================
+   UI BUTTON EVENTS
+================================ */
+
+document.getElementById("demoBtn").addEventListener("click",loadDemoData);
+document.getElementById("fetchBtn").addEventListener("click",fetchLiveData);
+
+document.getElementById("resetCam").addEventListener("click",()=>{
+  camera.position.set(0,5,12);
 });
-}
 
-/* ENTER SPACE FIX */
-function enterSpace(){
+document.getElementById("audioBtn").addEventListener("click",()=>{
+  const audio = document.getElementById("spaceAudio");
+  audioEnabled=!audioEnabled;
 
-document.getElementById('hero').classList.add('hidden');
+  if(audioEnabled) audio.play();
+  else audio.pause();
+});
 
-/* IMPORTANT: SHOW PANEL */
-document.getElementById('infoPanel').classList.add('active');
+function enterSpace() {
+    // Hide the hero screen
+    const hero = document.getElementById('hero');
+    hero.classList.add('hidden');
 
-/* INIT YOUR THREE.JS */
-if(typeof initThreeJS === "function"){
-initThreeJS();
-}
+    // Show the dashboard panel
+    const panel = document.getElementById('infoPanel');
+    panel.classList.add('active');
+
+    // Optionally start audio
+    const audio = document.getElementById('spaceAudio');
+    audio.play().catch(e => console.log("Audio blocked until interaction"));
+
+    // Initialize 3D scene
+    initThreeJS();  // Make sure you have this function from your Three.js code
 }
 
 </script>
-
 <script src="script.js"></script>
 
 </body>
-</html>
+</html> 
