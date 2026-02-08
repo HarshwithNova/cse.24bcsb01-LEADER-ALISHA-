@@ -541,41 +541,67 @@ function updateStats() {
 }
 
 function selectAsteroid(id) {
-    const asteroid = asteroidsThree.find(a => a.userData.id === id);
-    if (!asteroid) return;
-    
-    // Deselect previous
+    if (!asteroidsThree || asteroidsThree.length === 0) {
+        console.warn('No asteroids available yet.');
+        return;
+    }
+
+    // Ensure ID comparison works (number or string)
+    const asteroid = asteroidsThree.find(a => a.userData.id == id);
+    if (!asteroid) {
+        console.warn('Asteroid not found for ID:', id);
+        return;
+    }
+
+    // Deselect previously selected asteroid
     if (selectedAsteroid) {
-        selectedAsteroid.material.emissiveIntensity = 0;
+        if (selectedAsteroid.material) {
+            selectedAsteroid.material.emissiveIntensity = 0;
+        }
         const prevCard = document.querySelector(`.asteroid-card[data-id="${selectedAsteroid.userData.id}"]`);
         if (prevCard) prevCard.classList.remove('selected');
     }
-    
-    // Select new
+
+    // Select new asteroid
     selectedAsteroid = asteroid;
-    asteroid.material.emissiveIntensity = 0.5;
-    
-    // Update UI
+    if (asteroid.material) asteroid.material.emissiveIntensity = 0.5;
+
+    // Update UI card highlight
     const card = document.querySelector(`.asteroid-card[data-id="${id}"]`);
     if (card) card.classList.add('selected');
-    
+
+    // Update dropdown value without triggering change event loop
     const selectElement = document.getElementById('selectAsteroid');
-    if (selectElement) {
+    if (selectElement && selectElement.value != id) {
         selectElement.value = id;
     }
-    
-    // Move camera
+
+    // Move camera smoothly
     if (camera && controls) {
-        const targetPosition = asteroid.position.clone();
-        targetPosition.multiplyScalar(0.7);
-        targetPosition.y += 5;
-        
-        camera.position.copy(targetPosition);
-        controls.target.copy(asteroid.position);
+        const target = asteroid.position.clone();
+        const offset = new THREE.Vector3(0, 5, 10); // camera offset
+        const newCameraPos = target.clone().add(offset);
+
+        // Use a simple tween-like movement
+        const duration = 500; // ms
+        const start = performance.now();
+        const startPos = camera.position.clone();
+        const startTarget = controls.target.clone();
+
+        function animateCamera(time) {
+            const t = Math.min((time - start) / duration, 1);
+            camera.position.lerpVectors(startPos, newCameraPos, t);
+            controls.target.lerpVectors(startTarget, target, t);
+            controls.update();
+
+            if (t < 1) requestAnimationFrame(animateCamera);
+        }
+        requestAnimationFrame(animateCamera);
     }
-    
-    showNotification(`Tracking ${asteroid.userData.name}`);
+
+    showNotification(`Tracking asteroid: ${asteroid.userData.name}`);
 }
+
 
 // ============================================================================
 // UI FUNCTIONS
