@@ -1,304 +1,78 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<title>Cosmic Watch - Asteroid Tracker</title>
-<link rel="stylesheet" href="cosmic watch.css">
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.2/build/three.min.js"></script>
-
-<style>
-
-/* 🌍 EARTH CIRCLE */
-.earth-container {
-  width: 260px;
-  height: 260px;
-  margin: 40px auto;
-  border-radius: 50%;
-  position: relative;
-  box-shadow: 0 0 60px rgba(100,150,255,0.6);
-  overflow: hidden;
-}
-
-.earth {
-  width: 100%;
-  height: 100%;
-  border-radius: 50%;
-  background:
-    radial-gradient(circle at 30% 30%, #6ec6ff, #1e3c72 60%, #020b2d);
-  animation: rotateEarth 20s linear infinite;
-}
-
-@keyframes rotateEarth {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-/* Fake continents */
-.earth::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(0,255,180,0.25) 0,
-      rgba(0,255,180,0.25) 12px,
-      transparent 12px,
-      transparent 24px
-    );
-  border-radius: 50%;
-  opacity: 0.4;
-}
-
-/* 🔼 Scroll To Top Button */
-#topBtn{
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  background: #0a1a3a;
-  color: white;
-  border: none;
-  padding: 12px 16px;
-  border-radius: 50%;
-  cursor: pointer;
-  display: none;
-}
-/* 🌌 STAR CURSOR EFFECT */
-.star{
-  position: fixed;
-  width:20px;
-  height:20px;
-  background:white;
-  border-radius:50%;
-  pointer-events:none;
-  box-shadow:0 0 10px #7ecbff, 0 0 20px #7ecbff;
-  animation:starFade 0.8s linear forwards;
-  z-index:9999;
-}
-
-@keyframes starFade{
-  from{
-    opacity:5;
-    transform:scale(1);
-  }
-  to{
-    opacity:0;
-    transform:scale(0);
-  }
-}
-/* 🌌 3D Scroll Reveal Effect */
-.reveal{
-  opacity:0;
-  transform: perspective(900px) rotateX(60deg) scale(0.8) translateY(120px);
-  transition: all 1s cubic-bezier(.2,.8,.2,1);
-  transform-origin: center bottom;
-}
-
-.reveal.active{
-  opacity:1;
-  transform: perspective(900px) rotateX(0deg) scale(1) translateY(0);
-}
-.reveal.active{
-  opacity:1;
-  transform:
-    perspective(900px)
-    rotateX(0deg)
-    scale(1.05)
-    translateY(0);
-}
-
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Watch</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.min.js"></script>
 </head>
-
 <body>
+    <div class="hero" id="hero">
+        <div class="hero-content">
+            <h1 class="title">COSMIC</h1>
+            <h2 class="subtitle">WATCH</h2>
+            <p class="tagline">Real-time near-Earth asteroid visualization and risk awareness</p>
+            <button class="cta" onclick="enterSpace()">ENTER SPACE</button>
+        </div>
+    </div>
 
-<div class="space-bg">
-  
-    <div class="stars"></div>
-    <div class="stars2"></div>
-    <div class="orbit"></div>
-</div>
-<header>
-    <div class="logo">🌌 COSMIC WATCH</div>
-    <nav>
-        <a href="dashboard.html">Dashboard</a>
-        <a href="risk.html">Risk Analyzer</a>
-        <a href="alerts.html">Alerts</a>
-        <a href="login.html" class="login">Login</a>
-    </nav>
-</header>
+    <div id="infoPanel">
+        <div class="panel-header">
+            <h3><i class="fas fa-satellite"></i> ASTEROID CONTROL PANEL</h3>
+        </div>
+        <button id="fetchBtn" class="panel-btn">
+            <i class="fas fa-sync-alt"></i> FETCH LIVE DATA
+        </button>
+        <button id="demoBtn" class="panel-btn secondary">
+            <i class="fas fa-vial"></i> LOAD DEMO DATA
+        </button>
+        <select id="selectAsteroid">
+            <option value="">Select an Asteroid</option>
+        </select>
+        
+        <div class="stats">
+            <div class="stat-item">
+                <span class="stat-label">Total Asteroids:</span>
+                <span class="stat-value" id="totalCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Hazardous:</span>
+                <span class="stat-value danger" id="hazardCount">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-label">Safe:</span>
+                <span class="stat-value safe" id="safeCount">0</span>
+            </div>
+        </div>
+        
+        <div id="asteroidList">
+            <div class="empty-state">
+                <i class="fas fa-meteor"></i>
+                <p>No asteroid data loaded</p>
+                <p class="hint">Click buttons above to load data</p>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <button id="resetCam" class="control-btn">
+                <i class="fas fa-crosshairs"></i> RESET VIEW
+            </button>
+            <button id="audioBtn" class="control-btn">
+                <i class="fas fa-volume-up"></i> AUDIO ON/OFF
+            </button>
+        </div>
+    </div>
 
-<section class="intro-reveal">
-    <h1 class="introreveal">The Infinite Universe</h1>
-    <p>
-      Space is vast, mysterious, and constantly in motion. Millions of celestial
-      bodies travel through the cosmos every second — including Near-Earth Objects
-      that pass silently by our planet.
+    <canvas id="spaceScene"></canvas>
     
-      Understanding space is not just curiosity — it is survival, science,
-      and humanity’s next frontier.
-    </p>
-</section>
+    <audio id="spaceAudio" loop>
+        <source src="https://assets.mixkit.co/music/preview/mixkit-space-game-668.mp3" type="audio/mpeg">
+    </audio>
 
-<section class="hero reveal">
-    <h1>Interstellar Asteroid Tracker</h1>
-    <p>Real-Time Monitoring of Near-Earth Objects</p>
-    <a href="live data.html"><button>Explore Live Data</button></a>
-</section>
-
-<section class="stats reveal">
-    <div class="card">
-        <h2>245</h2>
-        <p>Asteroids Today</p>
-    </div>
-    <div class="card">
-        <h2>12</h2>
-        <p>Potentially Hazardous</p>
-    </div>
-    <div class="card">
-        <h2>78,000 km</h2>
-        <p>Closest Approach</p>
-    </div>
-</section>
-
-<section class="scientists reveal">
-  <h2 align="center">🧠 Minds Who Unlocked the Cosmos</h2>
-
-  <div class="scientist-scroll">
-
-    <div class="scientist-card">
-      <div class="card-inner">
-        <h3>Carl Sagan</h3>
-        <p>“Somewhere, something incredible is waiting to be known.”</p>
-        <span>Cosmologist & Science Communicator</span>
-      </div>
-    </div>
-
-    <div class="scientist-card">
-      <div class="card-inner">
-        <h3>Stephen Hawking</h3>
-        <p>Explored black holes, time, and the origins of the universe.</p>
-        <span>Theoretical Physicist</span>
-      </div>
-    </div>
-
-    <div class="scientist-card">
-      <div class="card-inner">
-        <h3>Isaac Newton</h3>
-        <p>Laid the foundation of classical mechanics and gravity.</p>
-        <span>Father of Modern Physics</span>
-      </div>
-    </div>
-
-    <div class="scientist-card">
-      <div class="card-inner">
-        <h3>Galileo Galilei</h3>
-        <p>First to observe planets, moons, and stars through a telescope.</p>
-        <span>Father of Observational Astronomy</span>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<section class="asteroids reveal">
-<h2>☄️ Live Asteroid Feed</h2>
-
-<div class="asteroid-card">
-    <h3>Asteroid AX-221</h3>
-    <p>Velocity: 24 km/s</p>
-    <p>Distance: 1.2M km</p>
-    <span class="safe">SAFE</span>
-</div>
-
-<div class="asteroid-card hazard">
-    <h3>Asteroid ZX-99</h3>
-    <p>Velocity: 42 km/s</p>
-    <p>Distance: 450k km</p>
-    <span class="danger">HAZARDOUS</span>
-</div>
-
-<div class="asteroid-card">
-    <h3>Asteroid LQ-77</h3>
-    <p>Velocity: 18 km/s</p>
-    <p>Distance: 2.3M km</p>
-    <span class="safe">SAFE</span>
-</div>
-
-</section>
-
-<footer>
-    <p>© 2026 Cosmic Watch-Asteroid Tracker</p>
-</footer>
-
-<button id="topBtn">↑</button>
-
-<script>
-function revealOnScroll() {
-  const reveals = document.querySelectorAll(".reveal");
-
-  reveals.forEach(el => {
-    const windowHeight = window.innerHeight;
-    const elementTop = el.getBoundingClientRect().top;
-    const revealPoint = 100;
-
-    if (elementTop < windowHeight - revealPoint) {
-      el.classList.add("active");
-    }
-  });
-}
-
-window.addEventListener("scroll", revealOnScroll);
-revealOnScroll();
-
-const topBtn = document.getElementById("topBtn");
-
-window.addEventListener("scroll", () => {
-  if (window.scrollY > 300) {
-    topBtn.style.display = "block";
-  } else {
-    topBtn.style.display = "none";
-  }
-});
-
-topBtn.onclick = () => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-};
-// 🧠 3D Tilt Effect
-document.querySelectorAll(".scientist-card").forEach(card=>{
-  card.addEventListener("mousemove",(e)=>{
-    const rect = card.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const rotateY = (x / rect.width - 0.5) * 20;
-    const rotateX = -(y / rect.height - 0.5) * 20;
-
-    card.style.transform =
-      `rotateY(${rotateY}deg) rotateX(${rotateX}deg) translateY(-10px)`;
-  });
-
-  card.addEventListener("mouseleave",()=>{
-    card.style.transform = "rotateY(0) rotateX(0)";
-  });
-});
-// ⭐ Cursor Star Trail Effect
-document.addEventListener("mousemove",(e)=>{
-
-  const star = document.createElement("div");
-  star.className = "star";
-
-  star.style.left = e.clientX + "px";
-  star.style.top = e.clientY + "px";
-
-  document.body.appendChild(star);
-
-  setTimeout(()=>{
-    star.remove();
-  },800);
-
-});
-
-</script>
-
+    <script src="script.js"></script>
 </body>
 </html>
