@@ -885,22 +885,30 @@ function registerUser(){
 function sendReset(){
   const email = document.getElementById("forgotEmail").value;
 
-  if(email){
-     alert("Reset link sent to " + email + " (Demo)");
-     backToLogin();
-  }else{
-     alert("Enter email first");
+  if(!email){
+    alert("Enter email first");
+    return;
   }
+
+  fetch("/api/forgot-password", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ email: email })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if(data.success){
+      alert("Reset link sent to your email 🚀");
+      backToLogin();
+    }else{
+      alert("Failed to send email ❌");
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Server error ❌");
+  });
 }
-fetch("/api/forgot-password",{
-   method:"POST",
-   headers:{ "Content-Type":"application/json" },
-   body: JSON.stringify({ email: email })
-})
-.then(res=>res.json())
-.then(()=>{
-   alert("Reset email sent 🚀");
-})
-.catch(()=>{
-   alert("Email failed ❌");
-});
+
