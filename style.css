@@ -403,3 +403,98 @@ select:focus {
         font-size: 1.5rem;
     }
 }
+/* ======================= */
+/* 📱 MOBILE RESPONSIVE FLEXBOX */
+@media (max-width:768px){
+
+  html,body{
+    overflow:auto;
+  }
+
+  /* LOGIN BOX */
+  .login-container{
+    width:90%;
+    padding:1.5rem;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+  }
+
+  /* HERO SECTION */
+  .hero-content{
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+    padding:1rem;
+    text-align:center;
+  }
+
+  .title{
+    font-size:2.5rem;
+    letter-spacing:0.15em;
+  }
+
+  .subtitle{
+    font-size:1.2rem;
+  }
+
+  .tagline{
+    font-size:0.9rem;
+    margin-bottom:2rem;
+  }
+
+  .cta{
+    width:90%;
+    max-width:280px;
+  }
+
+  /* DASHBOARD PANEL FLEX */
+  #infoPanel{
+    width:100%;
+    height:auto;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    gap:12px;
+    padding:1rem;
+  }
+
+  /* BUTTON STACK */
+  .panel-btn{
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+  }
+
+  /* STATS FLEX WRAP */
+  .stats{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:10px;
+  }
+
+  .stat-item{
+    flex:1 1 45%;
+  }
+
+  /* CONTROLS FLEX */
+  .controls{
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+  }
+
+  .control-btn{
+    width:100%;
+  }
+
+  /* CANVAS FIT MOBILE */
+  canvas#spaceScene{
+    width:100%;
+    height:100%;
+  }
+}
