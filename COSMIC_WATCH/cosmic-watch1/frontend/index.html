@@ -96,10 +96,49 @@ html, body { width:100%; height:100%; font-family:'Orbitron',sans-serif; backgro
     <input type="email" id="email" placeholder="Email">
     <input type="password" id="password" placeholder="Password">
     <button class="login-btn" onclick="login()">Login</button>
-    <div class="login-options"><a href="#">Forgot Password?</a></div>
-    <div class="register-text">New user? <a href="#">Register</a></div>
+    <div class="login-options"><a href="#" onclick="showForgot()">Forgot Password?</a>
+</div>
+    <div class="register-text">New user? <a href="#" onclick="showRegister()">Register</a>
+</div>
   </div>
 </div>
+<!-- ======================== -->
+<!-- REGISTER PAGE -->
+<div id="registerPage" style="display:none;" class="authPage">
+  <div class="login-container">
+    <h2>Create Account</h2>
+    <div class="subtitle">Join Cosmic Watch</div>
+
+    <input type="text" id="regName" placeholder="Full Name">
+    <input type="email" id="regEmail" placeholder="Email">
+    <input type="password" id="regPassword" placeholder="Password">
+
+    <button class="login-btn" onclick="registerUser()">Register</button>
+
+    <div class="register-text">
+      Already have account?
+      <a href="#" onclick="backToLogin()">Login</a>
+    </div>
+  </div>
+</div>
+
+<!-- ======================== -->
+<!-- FORGOT PASSWORD PAGE -->
+<div id="forgotPage" style="display:none;" class="authPage">
+  <div class="login-container">
+    <h2>Reset Password</h2>
+    <div class="subtitle">Enter your email</div>
+
+    <input type="email" id="forgotEmail" placeholder="Email Address">
+
+    <button class="login-btn" onclick="sendReset()">Send Reset Link</button>
+
+    <div class="register-text">
+      <a href="#" onclick="backToLogin()">Back to Login</a>
+    </div>
+  </div>
+</div>
+
 
 <!-- ======================== -->
 <!-- HERO -->

@@ -853,3 +853,54 @@ window.addEventListener('error', (event) => {
 });
 
 console.log('🎉 Cosmic Watch Frontend Fully Loaded!');
+function showRegister(){
+  document.getElementById("loginPage").style.display="none";
+  document.getElementById("registerPage").style.display="flex";
+}
+
+function showForgot(){
+  document.getElementById("loginPage").style.display="none";
+  document.getElementById("forgotPage").style.display="flex";
+}
+
+function backToLogin(){
+  document.getElementById("registerPage").style.display="none";
+  document.getElementById("forgotPage").style.display="none";
+  document.getElementById("loginPage").style.display="flex";
+}
+
+function registerUser(){
+  const name = document.getElementById("regName").value;
+  const email = document.getElementById("regEmail").value;
+  const pass = document.getElementById("regPassword").value;
+
+  if(name && email && pass){
+     alert("Account Created 🚀 (Demo only)");
+     backToLogin();
+  }else{
+     alert("Fill all fields");
+  }
+}
+
+function sendReset(){
+  const email = document.getElementById("forgotEmail").value;
+
+  if(email){
+     alert("Reset link sent to " + email + " (Demo)");
+     backToLogin();
+  }else{
+     alert("Enter email first");
+  }
+}
+fetch("/api/forgot-password",{
+   method:"POST",
+   headers:{ "Content-Type":"application/json" },
+   body: JSON.stringify({ email: email })
+})
+.then(res=>res.json())
+.then(()=>{
+   alert("Reset email sent 🚀");
+})
+.catch(()=>{
+   alert("Email failed ❌");
+});

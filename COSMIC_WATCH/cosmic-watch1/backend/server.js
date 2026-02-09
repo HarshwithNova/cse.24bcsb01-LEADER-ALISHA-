@@ -6,6 +6,7 @@ const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
 const path = require('path');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
 
 const app = express();
@@ -19,6 +20,18 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+// ============================================================================
+// EMAIL SERVICE (FOR FORGOT PASSWORD)
+// ============================================================================
+
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: process.env.EMAIL_USER,   // your gmail
+        pass: process.env.EMAIL_PASS    // gmail app password
+    }
+});
+
 
 // NASA API Configuration
 const NASA_API_KEY = process.env.NASA_API_KEY || 'smJ35jKybPdC9UI2o8HfPs1Ad5fv87z7tNhLzUGe';
@@ -164,6 +177,43 @@ app.get('/api/test', (req, res) => {
         ]
     });
 });
+// ============================================================================
+// FORGOT PASSWORD EMAIL ENDPOINT
+// ============================================================================
+
+app.post('/api/forgot-password', async (req, res) => {
+
+    const { email } = req.body;
+
+    if(!email){
+        return res.status(400).json({ error: "Email required" });
+    }
+
+    try{
+
+        const mailOptions = {
+            from: process.env.EMAIL_USER,
+            to: email,
+            subject: "Cosmic Watch Password Reset 🚀",
+            html: `
+                <h2>Reset Your Password</h2>
+                <p>You requested a password reset.</p>
+                <p>If this was you, please login again to Cosmic Watch.</p>
+            `
+        };
+
+        await transporter.sendMail(mailOptions);
+
+        console.log("📧 Reset email sent to:", email);
+
+        res.json({ success:true });
+
+    }catch(err){
+        console.error("Email error:", err.message);
+        res.status(500).json({ error:"Email failed" });
+    }
+});
+
 
 // Helper function for demo data - FIXED
 function getDemoData() {
