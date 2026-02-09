@@ -759,30 +759,33 @@ function initEventListeners() {
 function toggleAudio() {
     const audio = document.getElementById('spaceAudio');
     const audioBtn = document.getElementById('audioBtn');
-    
+
     if (!audio || !audioBtn) return;
-    
+
     if (isAudioPlaying) {
         audio.pause();
         audioBtn.innerHTML = '<i class="fas fa-volume-up"></i> AUDIO ON';
+        isAudioPlaying = false;
     } else {
         audio.play().then(() => {
             audioBtn.innerHTML = '<i class="fas fa-volume-mute"></i> AUDIO OFF';
-        }).catch(error => {
-            console.log('Audio play failed:', error);
+            isAudioPlaying = true;
+        }).catch(err => {
+            console.log('Audio failed:', err);
         });
     }
-    
-    isAudioPlaying = !isAudioPlaying;
 }
 
 function resetCamera() {
-    if (camera && controls) {
-        camera.position.set(0, 5, 15);
-        controls.target.set(0, 0, 0);
-        showNotification('Camera view reset');
-    }
+    if (!camera || !controls) return;
+
+    camera.position.set(0, 5, 15);
+    controls.target.set(0, 0, 0);
+    controls.update();
+
+    showNotification('Camera reset');
 }
+
 
 // ============================================================================
 // GLOBAL EXPORTS & CLEANUP
